@@ -127,14 +127,14 @@ $(document).ready(function(){
 	// click handlers
 	// gif category button
 	$(document).on('click', 'button', function(){
-		$btntext = $(this).text();
+		$btntext = $(this).text().replace(/[^a-z0-9\s]/gi, '');
 		obj.initLoad($btntext);
 	});
 
 	// input button - call newButton
 	$('#input').on('submit', function(e){
 		e.preventDefault();
-		var $btntext = $('#user-input').val();
+		var $btntext = $('#user-input').val().replace(/[^a-z0-9\s]/gi, '');
 		obj.newButton($btntext);
 		obj.initLoad($btntext);
 	});
