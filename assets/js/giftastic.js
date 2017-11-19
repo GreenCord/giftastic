@@ -29,12 +29,13 @@ $(document).ready(function(){
 		[
 			'Happy',
 			'Sad',
-			'Angry'
+			'Angry',
+			'Wat'
 		],
 		playing: false,
 		buttonDisplay: function(arr){
 			$(arr).each(function(){
-				console.log(this);
+				var btns = $('#buttons').append($('<button>').text(this));
 			});
 		},
 		newButton: function(val){
@@ -53,6 +54,10 @@ $(document).ready(function(){
 	// gif category button
 	// input button
 	// gif image
+
+	// load initial buttons
+	var obj = giftastic;
+	obj.buttonDisplay(obj.categories);
 
 
 });
