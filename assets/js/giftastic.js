@@ -154,7 +154,7 @@ $(document).ready(function(){
 	$('#input').on('submit', function(e){
 		e.preventDefault();
 		obj.newButton($('#user-input').val());
-		obj.getGifs($('#user-input').val());
+		// obj.getGifs($('#user-input').val());
 	});
 
 	// gif image
