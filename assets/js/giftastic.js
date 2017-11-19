@@ -93,7 +93,7 @@ $(document).ready(function(){
 
 					} else if ($res.length == 0) {
 						
-						if (giftastic.loadstatus === 'start') {
+						if (giftastic.loadstatus === 'first') {
 							$('#error').text('No gifs found for ' + giftastic.currentcat + '!');
 							$('#error').fadeIn();
 						} else {
