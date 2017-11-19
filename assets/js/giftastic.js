@@ -79,7 +79,10 @@ $(document).ready(function(){
 					var $res = $(res.data);
 					$res.each(function(){
 						if (this.rating != 'r') {
-							var $gif = $('<div>').attr('class','gif');
+							var $gif = $('<div>').attr({
+								class: 'gif',
+								title: 'Click to Play/Pause'
+							});
 							var st_img = this.images.original_still.url;
 							var an_img = this.images.original.url;
 							$gif.append($('<img>').attr({
