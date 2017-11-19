@@ -173,8 +173,17 @@ $(document).ready(function(){
 		// height of document
 		console.log('document height',$(document).height());
 		// if position from top (win scrollTop) + window height = document height, do something
+		/*
 		if($(window).scrollTop() + $(window).height() === $(document).height()){
 			console.log('bottom reached!!!!');
+			obj.getGifs(obj.currentcat);
+		} else {
+			console.log('keep scrolling...');
+		}
+		*/
+		// user scrolls to last 5% of height
+		if($(window).scrollTop() + $(window).height() >= ( 0.95 * $(document).height() )){
+			console.log('bottom 5% reached!!!!');
 			obj.getGifs(obj.currentcat);
 		} else {
 			console.log('keep scrolling...');
