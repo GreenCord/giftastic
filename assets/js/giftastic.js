@@ -134,7 +134,6 @@ $(document).ready(function(){
 			obj.currentcat = $text;
 			obj.params.offset = 0;
 			obj.getGifs($text);
-			obj.loadstatus = 'done';
 		}
 
 	};
