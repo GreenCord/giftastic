@@ -240,11 +240,11 @@ html {
 
 	.gif img {
 		cursor: pointer;
-		display: inline-block;
+		display: block;
 		height: auto;
 		padding: 0.5rem;
 		vertical-align: top;
-		width: 50%;
+		width: 100%;
 	}
 
 	.gif .gif-rating {

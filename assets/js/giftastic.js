@@ -44,6 +44,7 @@ $(document).ready(function(){
 		],
 		playing: false,
 		currentcat: '',
+		loadstatus: '',
 
 		buttonDisplay: function(arr){
 			// empty current buttonset
@@ -66,7 +67,8 @@ $(document).ready(function(){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
-			
+				giftastic.params.offset += 10;
+				console.log('new offset', giftastic.params.offset );
 				$.ajax({
 					url: queryUrl,
 					method: this.method
@@ -74,7 +76,7 @@ $(document).ready(function(){
 			
 					var $gifdiv = $('#gif-display');
 					// $gifdiv.empty().append($('<p>').text('Here are some ' + val +' gifs. Click to animate!'));
-					giftastic.params.offset += 10;
+					
 					var $res = $(res.data);
 					$res.each(function(){
 						if (this.rating != 'r') {
@@ -93,11 +95,12 @@ $(document).ready(function(){
 
 					});
 					// $gifdiv.append($('<button>').attr('id','more').text('Load More'));
-					if ($(window).height() === $(document).height()) {
+					if ( ($(window).height() === $(document).height() ) && ( giftastic.loadstatus === 'first') ) {
 						console.log('window not full');
 						giftastic.getGifs(val);
 					} else {
 						console.log('window full');
+						giftastic.loadstatus = 'done';
 					}
 			});
 		},
@@ -136,9 +139,11 @@ $(document).ready(function(){
 		} else {
 			var $gifdiv = $('#gif-display');
 			$gifdiv.empty().append($('<p>').text('Here are some ' + $btntext +' gifs. Click to animate!'));
+			obj.loadstatus = 'first';
 			obj.currentcat = $btntext;
 			obj.params.offset = 0;
 			obj.getGifs($btntext);
+			obj.loadstatus = 'done';
 		}
 	});
 
@@ -167,11 +172,11 @@ $(document).ready(function(){
 	$(window).scroll(function(){
 		// check positions
 		// position from top of window
-		console.log('window scrollTop',$(window).scrollTop());
+		//console.log('window scrollTop',$(window).scrollTop());
 		// height of window
-		console.log('window height',$(window).height());
+		// console.log('window height',$(window).height());
 		// height of document
-		console.log('document height',$(document).height());
+		// console.log('document height',$(document).height());
 		// if position from top (win scrollTop) + window height = document height, do something
 		/*
 		if($(window).scrollTop() + $(window).height() === $(document).height()){
