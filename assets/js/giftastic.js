@@ -66,7 +66,12 @@ $(document).ready(function(){
 					var $gif = $('<div>').attr('class','gif');
 					var st_img = this.images.original_still.url;
 					var an_img = this.images.original.url;
-					$gif.append($('<img>').attr('src',st_img,'data-still',st_img,'data-animated',an_img,'data-playing','paused'));
+					$gif.append($('<img>').attr({
+						src: st_img,
+						'data-still': st_img,
+						'data-animated': an_img,
+						'data-playing': false
+					}));
 					$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));
 					$gifdiv.prepend($gif);
 				});
@@ -93,6 +98,10 @@ $(document).ready(function(){
 	});
 
 	// gif image
+	$(document).on('click', 'img', function(){
+		console.log('img clicked');
+		obj.playPause();
+	});
 
 	// load initial buttons
 	obj.buttonDisplay(obj.categories);
