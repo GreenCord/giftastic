@@ -24,7 +24,8 @@ $(document).ready(function(){
 		{
 			api_key: 'VDj8YgH1bOojE5OT8jTClTcOKUS1W9i8',
 			q: '',
-			limit: 10
+			limit: 10,
+			offset: 0
 		},
 		categories:
 		[
@@ -42,6 +43,7 @@ $(document).ready(function(){
 			'Retro Game'
 		],
 		playing: false,
+		currentcat: '',
 
 		buttonDisplay: function(arr){
 			// empty current buttonset
@@ -69,7 +71,8 @@ $(document).ready(function(){
 				method: this.method
 			}).done(function(res){
 				var $gifdiv = $('#gif-display');
-				$gifdiv.empty();
+				// $gifdiv.empty().append($('<p>').text('Here are some ' + val +' gifs. Click to animate!'));
+				giftastic.params.offset += 10;
 				var $res = $(res.data);
 				$res.each(function(){
 					if (this.rating != 'r') {
@@ -87,7 +90,7 @@ $(document).ready(function(){
 					}
 
 				});
-
+				$gifdiv.append($('<button>').attr('id','more').text('Load More'));
 			});
 		},
 
@@ -105,10 +108,10 @@ $(document).ready(function(){
 			var $bg = $('#gif-display');
 			if ($val.attr('data-playing') == 'playing') {
 				this.swapSrcs($val,$val.attr('data-still'),'paused');
-				$bg.attr('style','background-image: none');
+				// $bg.attr('style','background-image: none');
 			} else {
 				this.swapSrcs($val,$val.attr('data-animated'),'playing');
-				$bg.attr('style','background-image: url(\''+$val.attr('data-animated')+'\')');
+				// $bg.attr('style','background-image: url(\''+$val.attr('data-animated')+'\')');
 			}
 		}
 
@@ -118,7 +121,17 @@ $(document).ready(function(){
 	// click handlers
 	// gif category button
 	$(document).on('click', 'button', function(){
-		obj.getGifs($(this).text());
+		$btntext = $(this).text();
+		if ($btntext === 'Load More'){
+			$(this).remove();
+			obj.getGifs(obj.currentcat);
+		} else {
+			var $gifdiv = $('#gif-display');
+			$gifdiv.empty().append($('<p>').text('Here are some ' + $btntext +' gifs. Click to animate!'));
+			obj.currentcat = $btntext;
+			obj.params.offset = 0;
+			obj.getGifs($btntext);
+		}
 	});
 
 	// input button - call newButton
