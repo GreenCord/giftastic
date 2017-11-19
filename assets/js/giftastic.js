@@ -36,7 +36,6 @@ $(document).ready(function(){
 			'Christmas',
 			'Shrek',
 			'Beth in Rick and Morty',
-			'Butts',
 			'Jump to Conclusions',
 			'Holiday',
 			'Robots',
@@ -186,8 +185,8 @@ $(document).ready(function(){
 			console.log('keep scrolling...');
 		}
 		*/
-		// user scrolls to last 5% of height
-		if($(window).scrollTop() + $(window).height() >= ( 0.95 * $(document).height() )){
+		// user scrolls to last 2% of height
+		if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
 			console.log('bottom 5% reached!!!!');
 			obj.getGifs(obj.currentcat);
 		} else {
