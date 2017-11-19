@@ -34,12 +34,14 @@ $(document).ready(function(){
 		],
 		playing: false,
 		buttonDisplay: function(arr){
+			// loop thru array, append new button with array string
 			$(arr).each(function(){
 				var btns = $('#buttons').append($('<button>').text(this));
 			});
 		},
 		newButton: function(val){
 			// get user value from input, add to categories array, do buttonDisplay
+			console.log('adding',val);
 		},
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
@@ -50,13 +52,18 @@ $(document).ready(function(){
 
 	};
 
+	var obj = giftastic;
 	// click handlers
 	// gif category button
-	// input button
+	// input button - call newButton
+	$('#input').on('submit', function(e){
+		e.preventDefault();
+		obj.newButton($('#user-input').val());
+	});
+
 	// gif image
 
 	// load initial buttons
-	var obj = giftastic;
 	obj.buttonDisplay(obj.categories);
 
 
