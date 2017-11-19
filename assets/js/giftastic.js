@@ -94,7 +94,8 @@ $(document).ready(function(){
 
 					});
 					// $gifdiv.append($('<button>').attr('id','more').text('Load More'));
-					if ( ($(window).height() === $(document).height() ) && ( giftastic.loadstatus === 'first') ) {
+					// if ( ($(window).height() === $(document).height() ) && ( giftastic.loadstatus === 'first') ) {
+					if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
 						console.log('window not full');
 						giftastic.getGifs(val);
 					} else {
