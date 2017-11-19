@@ -1,22 +1,4 @@
-/* Reference divs:
-<div id="buttons"></div>
-
-<div id="gif-display" class="gifs-wrapper">
-	<div class="gif">
-		<img src="" alt="" />
-		<span class="gif-rating">Rated: G</span>
-	</div>
-</div>
-*/
-
 $(document).ready(function(){
-	// create giftastic object to contain everything needed for the program
-	// api url, parameters: api key, search term, limit, rating
-	// initial array of categories
-	// function to get and display buttons for categories array
-	// function to get and add buttons based on user input
-	// click handler to get ajax response from api to get and display gifs
-	// click handler to swap still/playing gif images
 	var giftastic = {
 		url: 'https://api.giphy.com/v1/gifs/search?',
 		method: 'GET',
@@ -67,18 +49,17 @@ $(document).ready(function(){
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10;
-				//console.log('new offset', giftastic.params.offset );
+			
 				$.ajax({
 					url: queryUrl,
 					method: this.method
 				}).done(function(res){
 			
-					var $gifdiv = $('#gif-display');
-					// $gifdiv.empty().append($('<p>').text('Here are some ' + val +' gifs. Click to animate!'));
-					
 					var $res = $(res.data);
-					$res.each(function(){
-						if (this.rating != 'r') {
+					var $gifdiv = $('#gif-display');
+					
+					$res.each(function(){ // for each returned object in the array
+						if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
 							var $gif = $('<div>').attr({
 								class: 'gif',
 								title: 'Click to Play/Pause'
@@ -94,15 +75,12 @@ $(document).ready(function(){
 							$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
 							$gifdiv.append($gif);
 						}
-
 					});
-					// $gifdiv.append($('<button>').attr('id','more').text('Load More'));
-					// if ( ($(window).height() === $(document).height() ) && ( giftastic.loadstatus === 'first') ) {
+					
+					// make sure initial load has enough gifs to fill screen
 					if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-						//console.log('window not full');
 						giftastic.getGifs(val);
 					} else {
-						//console.log('window full');
 						giftastic.loadstatus = 'done';
 					}
 			});
@@ -117,16 +95,23 @@ $(document).ready(function(){
 
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
-			//console.log('playing', val);
 			var $val = $(val);
 			var $bg = $('#gif-display');
 			if ($val.attr('data-playing') == 'playing') {
 				this.swapSrcs($val,$val.attr('data-still'),'paused');
-				// $bg.attr('style','background-image: none');
 			} else {
 				this.swapSrcs($val,$val.attr('data-animated'),'playing');
-				// $bg.attr('style','background-image: url(\''+$val.attr('data-animated')+'\')');
 			}
+		},
+
+		initLoad: function($text){
+			var $gifdiv = $('#gif-display');
+			$gifdiv.empty().append($('<p>').text('Here are some ' + $text +' gifs. Click to animate!'));
+			obj.loadstatus = 'first';
+			obj.currentcat = $text;
+			obj.params.offset = 0;
+			obj.getGifs($text);
+			obj.loadstatus = 'done';
 		}
 
 	};
@@ -136,25 +121,15 @@ $(document).ready(function(){
 	// gif category button
 	$(document).on('click', 'button', function(){
 		$btntext = $(this).text();
-		if ($btntext === 'Load More'){
-			// $(this).remove();
-			// obj.getGifs(obj.currentcat);
-		} else {
-			var $gifdiv = $('#gif-display');
-			$gifdiv.empty().append($('<p>').text('Here are some ' + $btntext +' gifs. Click to animate!'));
-			obj.loadstatus = 'first';
-			obj.currentcat = $btntext;
-			obj.params.offset = 0;
-			obj.getGifs($btntext);
-			obj.loadstatus = 'done';
-		}
+		obj.initLoad($btntext);
 	});
 
 	// input button - call newButton
 	$('#input').on('submit', function(e){
 		e.preventDefault();
-		obj.newButton($('#user-input').val());
-		// obj.getGifs($('#user-input').val());
+		var $btntext = $('#user-input').val();
+		obj.newButton($btntext);
+		obj.initLoad($btntext);
 	});
 
 	// gif image
@@ -163,39 +138,11 @@ $(document).ready(function(){
 	});
 
 
-	// detecting scroll to end of gif display to display more gifs
-	// $(document).on('scroll', function(){
-
-	// 	console.log('this',this);
-	// 	console.log('document scrollTop',$(this).scrollTop());
-	// 	console.log('document innerHeight', $(this).innerHeight());
-	// 	console.log('#gif-display scrollTop',$('#gif-display').scrollTop());
-	// 	console.log('#gif-display innerHeight', $('#gif-display').innerHeight());
-		
-	// });
+	// scroll loading
 	$(window).scroll(function(){
-		// check positions
-		// position from top of window
-		//console.log('window scrollTop',$(window).scrollTop());
-		// height of window
-		// console.log('window height',$(window).height());
-		// height of document
-		// console.log('document height',$(document).height());
-		// if position from top (win scrollTop) + window height = document height, do something
-		/*
-		if($(window).scrollTop() + $(window).height() === $(document).height()){
-			console.log('bottom reached!!!!');
-			obj.getGifs(obj.currentcat);
-		} else {
-			console.log('keep scrolling...');
-		}
-		*/
 		// user scrolls to last 2% of height
 		if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-			//console.log('bottom 5% reached!!!!');
 			obj.getGifs(obj.currentcat);
-		} else {
-			//console.log('keep scrolling...');
 		}
 	});
 
