@@ -173,7 +173,12 @@ $(document).ready(function(){
 		// height of document
 		console.log('document height',$(document).height());
 		// if position from top (win scrollTop) + window height = document height, do something
-		
+		if($(window).scrollTop() + $(window).height() === $(document).height()){
+			console.log('bottom reached!!!!');
+			obj.getGifs(obj.currentcat);
+		} else {
+			console.log('keep scrolling...');
+		}
 	});
 
 
