@@ -46,10 +46,13 @@ $(document).ready(function(){
 
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
+			
+			if (this.loadstatus != 'none') {
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10;
 			
+
 				$.ajax({
 					url: queryUrl,
 					method: this.method
@@ -80,17 +83,30 @@ $(document).ready(function(){
 					// make sure initial load has enough gifs to fill screen
 					// error handle when results returns 9 or less gifs
 					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+						
 						giftastic.getGifs(val);
+
 					} else if ( ($res.length < 9) && ($res.length > 0)) {
-						$('#gif-display').append($('<p>').text('No more gifs found!'));
-						giftastic.loadstatus = 'done';
+						$('#error').text('No more gifs found!');
+						$('#error').fadeIn();
+						giftastic.loadstatus = 'none';
+
 					} else if ($res.length == 0) {
-						$('#gif-display').empty().append($('<p>').text('No gifs found for ' + giftastic.currentcat + '!'));
-						giftastic.loadstatus = 'done';
+						
+						if (giftastic.loadstatus === 'start') {
+							$('#error').text('No gifs found for ' + giftastic.currentcat + '!');
+							$('#error').fadeIn();
+						} else {
+							$('#error').text('No more gifs found');
+							$('#error').fadeIn();
+						}
+						giftastic.loadstatus = 'none';
+
 					} else {
 						giftastic.loadstatus = 'done';
 					}
-			});
+				});
+			}
 		},
 
 		swapSrcs: function(obj, src, bool){
@@ -128,6 +144,7 @@ $(document).ready(function(){
 	// gif category button
 	$(document).on('click', 'button', function(){
 		$btntext = $(this).text().replace(/[^a-z0-9\s]/gi, '');
+		$('#error').fadeOut();
 		obj.initLoad($btntext);
 	});
 
@@ -135,6 +152,7 @@ $(document).ready(function(){
 	$('#input').on('submit', function(e){
 		e.preventDefault();
 		var $btntext = $('#user-input').val().replace(/[^a-z0-9\s]/gi, '');
+		$('#error').fadeOut();
 		obj.newButton($btntext);
 		obj.initLoad($btntext);
 	});

@@ -252,6 +252,13 @@ html {
 		padding: 0.5rem;
 		text-shadow: 1px 1px 1px #fff;
 	}
+
+	.msg-error {
+		background-color: #ffbaba;
+		color: #d8000c;
+		margin: 0.5rem;
+		padding: 0.5rem;
+	}
 	/* End content wrapper */
 
 	/* Footer wrapper - contains footer content */
@@ -343,6 +350,10 @@ html {
 	.gif:nth-of-type(3n) {
 		margin-right: 0;
 	}
+	.msg-error {
+		margin: 1rem;
+		padding: 1rem;
+	}
 }
 
 @media only screen and (min-width: 1280px) {
@@ -370,7 +381,7 @@ html {
 		padding: 1.5rem;
 	}
 	.button-wrapper, .gifs-wrapper {
-		margin: 1rem;
+		margin: 1.5rem;
 	}
 	.gif {
 		width: 18%;
@@ -381,6 +392,10 @@ html {
 	}
 	.gif:nth-of-type(5n) {
 		margin-right: 0;
+	}
+	.msg-error {
+		margin: 1.5rem;
+		padding: 1.5rem;
 	}
 }
 
