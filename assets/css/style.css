@@ -243,7 +243,6 @@ html {
 		display: block;
 		height: auto;
 		padding: 0.5rem;
-		vertical-align: top;
 		width: 100%;
 	}
 
@@ -317,6 +316,9 @@ html {
 	.header-wrapper, .button-wrapper, .gifs-wrapper {
 		padding: 1rem;
 	}
+	.button-wrapper, .gifs-wrapper {
+		margin: 1rem;
+	}
 	.button-wrapper .user-input {
 		margin-bottom: 0.5rem;
 	}
@@ -366,6 +368,9 @@ html {
 @media only screen and (min-width: 1600px) {
 	.header-wrapper, .button-wrapper, .gifs-wrapper {
 		padding: 1.5rem;
+	}
+	.button-wrapper, .gifs-wrapper {
+		margin: 1rem;
 	}
 	.gif {
 		width: 18%;
