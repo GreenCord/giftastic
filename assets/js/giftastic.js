@@ -64,33 +64,41 @@ $(document).ready(function(){
 
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
-			this.params.q = val;
-			var queryUrl = this.url + $.param(this.params);
-			$.ajax({
-				url: queryUrl,
-				method: this.method
-			}).done(function(res){
-				var $gifdiv = $('#gif-display');
-				// $gifdiv.empty().append($('<p>').text('Here are some ' + val +' gifs. Click to animate!'));
-				giftastic.params.offset += 10;
-				var $res = $(res.data);
-				$res.each(function(){
-					if (this.rating != 'r') {
-						var $gif = $('<div>').attr('class','gif');
-						var st_img = this.images.original_still.url;
-						var an_img = this.images.original.url;
-						$gif.append($('<img>').attr({
-							src: st_img,
-							'data-still': st_img,
-							'data-animated': an_img,
-							'data-playing': 'paused'
-						}));
-						$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
-						$gifdiv.append($gif);
-					}
+				this.params.q = val;
+				var queryUrl = this.url + $.param(this.params);
+			
+				$.ajax({
+					url: queryUrl,
+					method: this.method
+				}).done(function(res){
+			
+					var $gifdiv = $('#gif-display');
+					// $gifdiv.empty().append($('<p>').text('Here are some ' + val +' gifs. Click to animate!'));
+					giftastic.params.offset += 10;
+					var $res = $(res.data);
+					$res.each(function(){
+						if (this.rating != 'r') {
+							var $gif = $('<div>').attr('class','gif');
+							var st_img = this.images.original_still.url;
+							var an_img = this.images.original.url;
+							$gif.append($('<img>').attr({
+								src: st_img,
+								'data-still': st_img,
+								'data-animated': an_img,
+								'data-playing': 'paused'
+							}));
+							$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
+							$gifdiv.append($gif);
+						}
 
-				});
-				$gifdiv.append($('<button>').attr('id','more').text('Load More'));
+					});
+					// $gifdiv.append($('<button>').attr('id','more').text('Load More'));
+					if ($(window).height() === $(document).height()) {
+						console.log('window not full');
+						giftastic.getGifs(val);
+					} else {
+						console.log('window full');
+					}
 			});
 		},
 
@@ -123,8 +131,8 @@ $(document).ready(function(){
 	$(document).on('click', 'button', function(){
 		$btntext = $(this).text();
 		if ($btntext === 'Load More'){
-			$(this).remove();
-			obj.getGifs(obj.currentcat);
+			// $(this).remove();
+			// obj.getGifs(obj.currentcat);
 		} else {
 			var $gifdiv = $('#gif-display');
 			$gifdiv.empty().append($('<p>').text('Here are some ' + $btntext +' gifs. Click to animate!'));
@@ -145,8 +153,31 @@ $(document).ready(function(){
 		obj.playPause(this);
 	});
 
+
+	// detecting scroll to end of gif display to display more gifs
+	// $(document).on('scroll', function(){
+
+	// 	console.log('this',this);
+	// 	console.log('document scrollTop',$(this).scrollTop());
+	// 	console.log('document innerHeight', $(this).innerHeight());
+	// 	console.log('#gif-display scrollTop',$('#gif-display').scrollTop());
+	// 	console.log('#gif-display innerHeight', $('#gif-display').innerHeight());
+		
+	// });
+	$(window).scroll(function(){
+		// check positions
+		// position from top of window
+		console.log('window scrollTop',$(window).scrollTop());
+		// height of window
+		console.log('window height',$(window).height());
+		// height of document
+		console.log('document height',$(document).height());
+		// if position from top (win scrollTop) + window height = document height, do something
+		
+	});
+
+
 	// load initial buttons
 	obj.buttonDisplay(obj.categories);
-
 
 });
