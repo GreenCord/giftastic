@@ -80,6 +80,7 @@ $(document).ready(function(){
 
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
+			console.log('playing', val);
 		}
 
 	};
@@ -100,7 +101,7 @@ $(document).ready(function(){
 	// gif image
 	$(document).on('click', 'img', function(){
 		console.log('img clicked');
-		obj.playPause();
+		obj.playPause(this);
 	});
 
 	// load initial buttons
