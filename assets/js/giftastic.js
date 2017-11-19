@@ -70,7 +70,7 @@ $(document).ready(function(){
 						src: st_img,
 						'data-still': st_img,
 						'data-animated': an_img,
-						'data-playing': false
+						'data-playing': 'paused'
 					}));
 					$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));
 					$gifdiv.prepend($gif);
@@ -78,9 +78,22 @@ $(document).ready(function(){
 			});
 		},
 
+		swapSrcs: function(obj, src, bool){
+			obj.attr({
+				src: src,
+				'data-playing': bool
+			});
+		},
+
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
 			console.log('playing', val);
+			var $val = $(val);
+			if ($val.attr('data-playing') == 'playing') {
+				this.swapSrcs($val,$val.attr('data-still'),'paused');
+			} else {
+				this.swapSrcs($val,$val.attr('data-animated'),'playing');
+			}
 		}
 
 	};
@@ -100,7 +113,6 @@ $(document).ready(function(){
 
 	// gif image
 	$(document).on('click', 'img', function(){
-		console.log('img clicked');
 		obj.playPause(this);
 	});
 
