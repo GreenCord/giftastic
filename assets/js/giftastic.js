@@ -50,10 +50,12 @@ $(document).ready(function(){
 			cats.push(val);
 			this.buttonDisplay(cats);
 		},
-		
+
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
+			console.log('getting',val);
 		},
+
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
 		}
@@ -63,6 +65,10 @@ $(document).ready(function(){
 	var obj = giftastic;
 	// click handlers
 	// gif category button
+	$(document).on('click', 'button', function(){
+		obj.getGifs($(this).text());
+	});
+
 	// input button - call newButton
 	$('#input').on('submit', function(e){
 		e.preventDefault();
