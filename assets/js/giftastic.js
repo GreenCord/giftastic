@@ -67,7 +67,7 @@ $(document).ready(function(){
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10;
-				console.log('new offset', giftastic.params.offset );
+				//console.log('new offset', giftastic.params.offset );
 				$.ajax({
 					url: queryUrl,
 					method: this.method
@@ -99,10 +99,10 @@ $(document).ready(function(){
 					// $gifdiv.append($('<button>').attr('id','more').text('Load More'));
 					// if ( ($(window).height() === $(document).height() ) && ( giftastic.loadstatus === 'first') ) {
 					if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-						console.log('window not full');
+						//console.log('window not full');
 						giftastic.getGifs(val);
 					} else {
-						console.log('window full');
+						//console.log('window full');
 						giftastic.loadstatus = 'done';
 					}
 			});
@@ -117,7 +117,7 @@ $(document).ready(function(){
 
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
-			console.log('playing', val);
+			//console.log('playing', val);
 			var $val = $(val);
 			var $bg = $('#gif-display');
 			if ($val.attr('data-playing') == 'playing') {
@@ -191,10 +191,10 @@ $(document).ready(function(){
 		*/
 		// user scrolls to last 2% of height
 		if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-			console.log('bottom 5% reached!!!!');
+			//console.log('bottom 5% reached!!!!');
 			obj.getGifs(obj.currentcat);
 		} else {
-			console.log('keep scrolling...');
+			//console.log('keep scrolling...');
 		}
 	});
 
