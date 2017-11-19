@@ -28,10 +28,18 @@ $(document).ready(function(){
 		},
 		categories:
 		[
-			'Happy',
-			'Sad',
-			'Angry',
-			'Wat'
+			'Spy Tools',
+			'Wild Wild West',
+			'Mission Impossible',
+			'Get Smart',
+			'Christmas',
+			'Shrek',
+			'Beth in Rick and Morty',
+			'Butts',
+			'Jump to Conclusions',
+			'Holiday',
+			'Robots',
+			'Retro Game'
 		],
 		playing: false,
 
@@ -61,20 +69,25 @@ $(document).ready(function(){
 				method: this.method
 			}).done(function(res){
 				var $gifdiv = $('#gif-display');
+				$gifdiv.empty();
 				var $res = $(res.data);
 				$res.each(function(){
-					var $gif = $('<div>').attr('class','gif');
-					var st_img = this.images.original_still.url;
-					var an_img = this.images.original.url;
-					$gif.append($('<img>').attr({
-						src: st_img,
-						'data-still': st_img,
-						'data-animated': an_img,
-						'data-playing': 'paused'
-					}));
-					$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));
-					$gifdiv.prepend($gif);
+					if (this.rating != 'r') {
+						var $gif = $('<div>').attr('class','gif');
+						var st_img = this.images.original_still.url;
+						var an_img = this.images.original.url;
+						$gif.append($('<img>').attr({
+							src: st_img,
+							'data-still': st_img,
+							'data-animated': an_img,
+							'data-playing': 'paused'
+						}));
+						$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
+						$gifdiv.append($gif);
+					}
+
 				});
+
 			});
 		},
 
@@ -89,10 +102,13 @@ $(document).ready(function(){
 			// when user clicks gif, if playing, pause, if paused, play.
 			console.log('playing', val);
 			var $val = $(val);
+			var $bg = $('#gif-display');
 			if ($val.attr('data-playing') == 'playing') {
 				this.swapSrcs($val,$val.attr('data-still'),'paused');
+				$bg.attr('style','background-image: none');
 			} else {
 				this.swapSrcs($val,$val.attr('data-animated'),'playing');
+				$bg.attr('style','background-image: url(\''+$val.attr('data-animated')+'\')');
 			}
 		}
 

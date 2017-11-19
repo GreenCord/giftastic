@@ -175,7 +175,8 @@ html {
 		text-align: left;
 	}
 
-	.button-wrapper button {
+	.button-wrapper button,
+	.button-wrapper button:visited {
 		background: #f0f0f1;
 		border: 1px solid #292c44;
 		color: #292c44;
@@ -188,6 +189,13 @@ html {
 		text-transform: uppercase;
 		vertical-align: top;
 		width: 49%;
+	}
+
+	.button-wrapper button:hover, 
+	.button-wrapper button:focus
+	{
+		background: #ff5349;
+
 	}
 
 	.button-wrapper button:nth-of-type(2n) {
@@ -215,26 +223,35 @@ html {
 
 	.gifs-wrapper {
 		background: #f0f0f1;
+		background-size: cover;
 		margin: 0.5rem;
 		padding: 0.5rem;
 	}
 
 	.gif {
 		display: block;
-		margin-bottom: 0.5rem;
+		margin: 1rem 0;
 		width: 100%;
+	}
+
+	.gif:first-of-type {
+		margin-top: 0;
 	}
 
 	.gif img {
 		cursor: pointer;
 		display: inline-block;
 		height: auto;
+		padding: 0.5rem;
 		vertical-align: top;
 		width: 50%;
 	}
 
 	.gif .gif-rating {
-		padding-left: 0.5rem;
+		display: inline-block;
+		font-weight: 700;
+		padding: 0.5rem;
+		text-shadow: 1px 1px 1px #fff;
 	}
 	/* End content wrapper */
 
