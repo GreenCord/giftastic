@@ -33,16 +33,24 @@ $(document).ready(function(){
 			'Wat'
 		],
 		playing: false,
+
 		buttonDisplay: function(arr){
+			// empty current buttonset
+			$('#buttons').empty();
+
 			// loop thru array, append new button with array string
 			$(arr).each(function(){
 				var btns = $('#buttons').append($('<button>').text(this));
 			});
 		},
+
 		newButton: function(val){
 			// get user value from input, add to categories array, do buttonDisplay
-			console.log('adding',val);
+			var cats = this.categories;
+			cats.push(val);
+			this.buttonDisplay(cats);
 		},
+		
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
 		},
