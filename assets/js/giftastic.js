@@ -19,6 +19,7 @@ $(document).ready(function(){
 	// click handler to swap still/playing gif images
 	var giftastic = {
 		url: 'https://api.giphy.com/v1/gifs/search?',
+		method: 'GET',
 		params:
 		{
 			api_key: 'VDj8YgH1bOojE5OT8jTClTcOKUS1W9i8',
@@ -53,7 +54,23 @@ $(document).ready(function(){
 
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
-			console.log('getting',val);
+			this.params.q = val;
+			var queryUrl = this.url + $.param(this.params);
+			$.ajax({
+				url: queryUrl,
+				method: this.method
+			}).done(function(res){
+				var $gifdiv = $('#gif-display');
+				var $res = $(res.data);
+				$res.each(function(){
+					var $gif = $('<div>').attr('class','gif');
+					var st_img = this.images.original_still.url;
+					var an_img = this.images.original.url;
+					$gif.append($('<img>').attr('src',st_img,'data-still',st_img,'data-animated',an_img,'data-playing','paused'));
+					$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));
+					$gifdiv.prepend($gif);
+				});
+			});
 		},
 
 		playPause: function(val){

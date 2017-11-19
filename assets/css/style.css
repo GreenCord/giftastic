@@ -226,10 +226,15 @@ html {
 	}
 
 	.gif img {
+		cursor: pointer;
 		display: inline-block;
 		height: auto;
 		vertical-align: top;
 		width: 50%;
+	}
+
+	.gif .gif-rating {
+		padding-left: 0.5rem;
 	}
 	/* End content wrapper */
 
