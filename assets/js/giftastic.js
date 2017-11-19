@@ -78,8 +78,15 @@ $(document).ready(function(){
 					});
 					
 					// make sure initial load has enough gifs to fill screen
-					if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
+					// error handle when results returns 9 or less gifs
+					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
 						giftastic.getGifs(val);
+					} else if ( ($res.length < 9) && ($res.length > 0)) {
+						$('#gif-display').append($('<p>').text('No more gifs found!'));
+						giftastic.loadstatus = 'done';
+					} else if ($res.length == 0) {
+						$('#gif-display').empty().append($('<p>').text('No gifs found for ' + giftastic.currentcat + '!'));
+						giftastic.loadstatus = 'done';
 					} else {
 						giftastic.loadstatus = 'done';
 					}
