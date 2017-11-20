@@ -26,6 +26,7 @@ $(document).ready(function(){
 		playing: false,
 		currentcat: '',
 		loadstatus: '',
+		requested: false,
 
 		buttonDisplay: function(arr){
 			// empty current buttonset
@@ -46,7 +47,7 @@ $(document).ready(function(){
 
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
-			
+			this.requested = true;
 			if (this.loadstatus != 'none') {
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
@@ -77,7 +78,9 @@ $(document).ready(function(){
 							}));
 							$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
 							$gifdiv.append($gif);
+
 						}
+						giftastic.requested = false;
 					});
 					
 					// make sure initial load has enough gifs to fill screen
@@ -166,7 +169,9 @@ $(document).ready(function(){
 	$(window).scroll(function(){
 		// user scrolls to last 2% of height
 		if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-			obj.getGifs(obj.currentcat);
+			if (!giftastic.requested) {
+				obj.getGifs(obj.currentcat);
+			}
 		}
 	});
 
