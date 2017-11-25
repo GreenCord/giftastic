@@ -21,18 +21,23 @@
 		max-width: 100%;
 	}
 
+	.t-giftastic .c-btn {
+		background: #024959;
+		border-radius: 5px;
+		color: #ffeee7;
+	}
+
+	.t-giftastic .c-btn--action {
+		background: #a3b8d4;
+		color: #092140;
+	}
+
 	.t-giftastic .c-btnlist {
 		background: #e6edf7;
     border-color: #092140;
     border-radius: 5px;
     border-style: double;
     border-width: 5px;
-	}
-
-	.t-giftastic .c-btnlist__btn {
-		background: #024959;
-		border-radius: 5px;
-		color: #ffeee7;
 	}
 
 	.t-giftastic .c-btnlist__header {

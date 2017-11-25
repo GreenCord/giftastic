@@ -11,7 +11,6 @@ $(document).ready(function(){
 		},
 		categories:
 		[
-			'Spy Tools',
 			'Wild Wild West',
 			'Mission Impossible',
 			'Get Smart',
@@ -31,10 +30,14 @@ $(document).ready(function(){
 		buttonDisplay: function(arr){
 			// empty current buttonset
 			$('#js-buttons').empty();
+			if(arr.length != 0) {
+				$('#js-clear-history').fadeIn();
+				$('#js-input').fadeIn();
+			}
 
 			// loop thru array, append new button with array string
 			$(arr).each(function(){
-				var btns = $('#js-buttons').append($('<button>').text(this).attr('class','c-btnlist__btn'));
+				var btns = $('#js-buttons').prepend($('<button>').text(this).attr('class','c-btn'));
 			});
 		},
 
@@ -42,7 +45,12 @@ $(document).ready(function(){
 			// get user value from input, add to categories array, do buttonDisplay
 			var cats = this.categories;
 			cats.push(val);
+			if (cats.length >= 10) {
+				cats.splice(0,1);
+			}
 			this.buttonDisplay(cats);
+			localStorage.clear();
+			localStorage.setItem('cats',JSON.stringify(cats));
 		},
 
 		getGifs: function(val){
@@ -157,23 +165,53 @@ $(document).ready(function(){
 	};
 
 	var obj = giftastic;
+	var lstorage = JSON.parse(localStorage.getItem('cats'));
+	console.log(lstorage);
+
+	// if user history exists, replace obj categories
+	if (lstorage != null){
+		console.log('Setting local storage array');
+		obj.categories = lstorage;
+		console.log(obj.categories);
+	} else {
+		$('#js-input-header').text('Example searches...');
+	}
 	// click handlers
 	// gif category button
 	$(document).on('click', 'button', function(){
+		if ($(this).text() != 'Clear History') {
 		$btntext = $(this).text().replace(/[^a-z0-9\s]/gi, '');
 		$('#js-error').fadeOut();
 		obj.initLoad($btntext);
+		}
 	});
 
 	// input button - call newButton
 	$('#js-add-button').on('submit', function(e){
+		lstorage = JSON.parse(localStorage.getItem('cats'));
+		if (!lstorage) {
+			console.log('localstorage doesn\'t exist');
+			$('js-buttons').empty();
+			obj.categories = [];
+		} else {
+			console.log('localstorage exists');
+		}
 		console.log('user input detected',$('#js-user-input').val().replace(/[^a-z0-9\s]/gi, ''));
 		e.preventDefault();
+		$('#js-input-header').text('10 most recent searches...');
 		var $btntext = $('#js-user-input').val().replace(/[^a-z0-9\s]/gi, '');
 		$('#js-error').fadeOut();
 		obj.newButton($btntext);
 		obj.initLoad($btntext);
 		$('#js-user-input').val('');
+	});
+
+	$('#js-clear-history').click(function(){
+		localStorage.clear();
+		obj.categories = [];
+		$('#js-buttons').empty();
+		$(this).fadeOut();
+		$('#js-input').fadeOut();
 	});
 
 	// gif image
