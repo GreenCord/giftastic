@@ -24,7 +24,7 @@ $(document).ready(function(){
 		],
 		playing: false,
 		currentcat: '',
-		loadstatus: '',
+		loadstatus: 'first',
 		requested: false,
 
 		buttonDisplay: function(arr){
@@ -45,7 +45,7 @@ $(document).ready(function(){
 			// get user value from input, add to categories array, do buttonDisplay
 			var cats = this.categories;
 			cats.push(val);
-			if (cats.length >= 10) {
+			if (cats.length >= 10) { // keep history to 10 searches
 				cats.splice(0,1);
 			}
 			this.buttonDisplay(cats);
@@ -53,77 +53,82 @@ $(document).ready(function(){
 			localStorage.setItem('cats',JSON.stringify(cats));
 		},
 
+		ajaxCall: function(url, val){
+			$.ajax({
+				url: url,
+				method: this.method
+			}).done(function(res){
+				var $res = $(res.data);
+				var $gifdiv = $('#js-gif-display');
+
+				if($res.length == 0) {
+					$gifdiv.hide();
+				} else {
+					$gifdiv.show();
+				}
+							
+				$res.each(function(){ // for each returned object in the array
+					if ((this.rating != 'r') || ($('#js-switch-click').attr('data-filter') == 'false')) { // filter out gifs rated 'r' and build gif tile to append
+						var $gif = $('<div>').attr({
+							class: 'l-grid__item',
+							title: 'Click to Play/Pause'
+						});
+						var st_img = this.images.fixed_height_still.url;
+						var an_img = this.images.fixed_height.url;
+						$gif.append($('<img>').attr({
+							class: 'l-grid__thumbnail',
+							src: st_img,
+							'data-still': st_img,
+							'data-animated': an_img,
+							'data-playing': 'paused'
+						}));
+						$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
+						$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
+						$gifdiv.append($gif);
+					}
+					giftastic.requested = false;
+					giftastic.loadPanel('hide');
+				}); // end done function
+				
+				// make sure initial load has enough gifs to fill screen
+				// error handle when results returns 9 or less gifs
+				if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+					
+					giftastic.getGifs(val);
+
+				} else if ( ($res.length < 9) && ($res.length > 0)) {
+					$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
+					$('#js-error').fadeIn();
+					giftastic.loadstatus = 'none';
+					giftastic.loadPanel('hide');
+
+				} else if ($res.length == 0) {
+					
+					if (giftastic.loadstatus === 'first') {
+						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
+						$('#js-error').fadeIn();
+					} else {
+						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
+						$('#js-error').fadeIn();
+					}
+					giftastic.loadstatus = 'none';
+					giftastic.loadPanel('hide');
+
+				} else {
+					giftastic.loadstatus = 'done';
+				} // end scroll checking
+			});
+		},
+
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
 			this.requested = true;
-			if (this.loadstatus != 'none') {
+			if (this.loadstatus != 'none') { // if not already loading a set of gifs do this stuff
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
-				giftastic.params.offset += 10;
+				giftastic.params.offset += 10; // increment offset for next call
 				this.loadPanel('show');
-				setTimeout(function(){
-					$.ajax({
-						url: queryUrl,
-						method: this.method
-					}).done(function(res){
-						console.log($(res.data));
-						var $res = $(res.data);
-						var $gifdiv = $('#js-gif-display');
-									
-						$res.each(function(){ // for each returned object in the array
-							if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
-								var $gif = $('<div>').attr({
-									class: 'l-grid__item',
-									title: 'Click to Play/Pause'
-								});
-								// var st_img = this.images.original_still.url;
-								// var an_img = this.images.original.url;
-								var st_img = this.images.fixed_height_still.url;
-								var an_img = this.images.fixed_height.url;
-								$gif.append($('<img>').attr({
-									class: 'l-grid__thumbnail',
-									src: st_img,
-									'data-still': st_img,
-									'data-animated': an_img,
-									'data-playing': 'paused'
-								}));
-								$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
-								$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
-								$gifdiv.append($gif);
-							}
-							giftastic.requested = false;
-							giftastic.loadPanel('hide');
-						}); // end done function
-						
-						// make sure initial load has enough gifs to fill screen
-						// error handle when results returns 9 or less gifs
-						if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
-							
-							giftastic.getGifs(val);
-
-						} else if ( ($res.length < 9) && ($res.length > 0)) {
-							$('#js-error').text('No more gifs found!');
-							$('#js-error').fadeIn();
-							giftastic.loadstatus = 'none';
-							giftastic.loadPanel('hide');
-
-						} else if ($res.length == 0) {
-							
-							if (giftastic.loadstatus === 'first') {
-								$('#js-error').text('No gifs found for ' + giftastic.currentcat + '!');
-								$('#js-error').fadeIn();
-							} else {
-								$('#js-error').text('No more gifs found');
-								$('#js-error').fadeIn();
-							}
-							giftastic.loadstatus = 'none';
-							giftastic.loadPanel('hide');
-
-						} else {
-							giftastic.loadstatus = 'done';
-						} // end scroll checking
-					}); // end .ajax done function
-				},900); // end set timeout function
+				setTimeout(this.ajaxCall(queryUrl,val),900);
 			}
 		},
 
@@ -166,13 +171,10 @@ $(document).ready(function(){
 
 	var obj = giftastic;
 	var lstorage = JSON.parse(localStorage.getItem('cats'));
-	console.log(lstorage);
 
 	// if user history exists, replace obj categories
 	if (lstorage != null){
-		console.log('Setting local storage array');
 		obj.categories = lstorage;
-		console.log(obj.categories);
 	} else {
 		$('#js-input-header').text('Example searches...');
 	}
@@ -190,13 +192,9 @@ $(document).ready(function(){
 	$('#js-add-button').on('submit', function(e){
 		lstorage = JSON.parse(localStorage.getItem('cats'));
 		if (!lstorage) {
-			console.log('localstorage doesn\'t exist');
 			$('js-buttons').empty();
 			obj.categories = [];
-		} else {
-			console.log('localstorage exists');
 		}
-		console.log('user input detected',$('#js-user-input').val().replace(/[^a-z0-9\s]/gi, ''));
 		e.preventDefault();
 		$('#js-input-header').text('10 most recent searches...');
 		var $btntext = $('#js-user-input').val().replace(/[^a-z0-9\s]/gi, '');
@@ -230,8 +228,18 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#js-switch-click').click(function(){
+		console.log('Safe Search Clicked');
+		if ($('#js-switch-click').attr('data-filter') == 'true') {
+			$('#js-switch-click').attr('data-filter','false');
+		} else {
+			$('#js-switch-click').attr('data-filter','true');
+		}
+		console.log('New toggle state of span: ', $('#js-switch-click').attr('data-filter'));
+	});
+
 
 	// load initial buttons
 	obj.buttonDisplay(obj.categories);
-
+console.log('Current toggle state of span: ',  $('#js-switch-click').attr('data-filter'));
 });

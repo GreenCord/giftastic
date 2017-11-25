@@ -110,6 +110,64 @@
 		color: #fefefe;
 	}
 
+	.c-btn__group {
+		background: #cfcfcf;
+		border-radius: 5px;
+		display: inline-block;
+		margin: 0.5rem 0;
+		padding: 0.5rem;
+	}
+	.c-btn__group__label {
+		color: inherit;
+		display: inline-block;
+		margin-right: 0.5rem;
+		vertical-align: middle;
+	}
+
+	.c-btn__switch {
+		display: inline-block;
+		height: 34px;
+		position: relative;
+		vertical-align: middle;
+		width: 60px;
+	}
+	.c-btn__switch input {
+		display: none;
+	}
+	.c-btn__switchslider {
+		background: #afafaf;
+		bottom: 0;
+		cursor: pointer;
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+		-webkit-transition: 0.4s;
+		transition: 0.4s;
+	}
+	.c-btn__switchslider:before{
+		background: #efefef;
+		bottom: 4px;
+		content: "";
+		height: 26px;
+		left: 4px;
+		position: absolute;
+		-webkit-transition: 0.4s;
+		transition: 0.4s;
+		width: 26px;
+	}
+	input:checked + .c-btn__switchslider {
+		background: #0e0e0e;
+	}
+	input:focus + .c-btn__switchslider {
+		box-shadow: 0 0 1px #0e0e0e;
+	}
+	input:checked + .c-btn__switchslider:before {
+		-webkit-transform: translateX(26px);
+	  -ms-transform: translateX(26px);
+	  transform: translateX(26px);
+	}
+
 	.c-btnlist {
 		border: 1px solid;
 		padding: 0.5rem;
@@ -142,6 +200,8 @@
 	}
 		.c-header__brandimg {
 			display: inline-block;
+			height: auto;
+			max-width: 200px;
 			vertical-align: middle;
 		}
 		.c-header__brandtext {
@@ -256,7 +316,7 @@
 			border-radius: 15px 0 0 15px;
 			display: inline-block;
 			padding: 0.5rem 1.25rem;
-			width: 90%;
+			width: 70%;
 		}
 		.c-search__btn-submit {
 			background: #afafaf;
@@ -265,7 +325,7 @@
 			color: #0e0e0e;
 			display: inline-block;
 			padding: 0.5rem;
-			width: 10%;
+			width: 30%;
 		}
 
 	.c-sec {
@@ -454,6 +514,9 @@
 	/* End Layout Elements */
 
 	/* mq480 Component Elements */
+	.c-header__brandimg {
+			max-width: unset;
+		}
 	.c-nav-menu__menulist {
 		border-left: 1px solid #0e0e0e;
 		margin-left: 25%;
@@ -475,10 +538,19 @@
 		}
 	/* End Layout Elements */
 	/* mq640 Component Elements */
+
 	.c-nav-menu__menulist {
 		margin-left: 50%;
 		max-width: 50%;
 	}
+
+	.c-search__input {
+		width: 80%;
+	}
+	.c-search__btn-submit {
+		width: 20%;
+	}
+
 	/* End Component Elements */
 }
 
@@ -566,6 +638,13 @@
 		.c-nav-menu__menuitem:last-of-type {
 			border-right: 1px solid #0e0e0e;
 		}
+
+	.c-search__input {
+		width: 90%;
+	}
+	.c-search__btn-submit {
+		width: 10%;
+	}
 }
 
 @media only screen and (min-width: 1280px) {
