@@ -30,11 +30,11 @@ $(document).ready(function(){
 
 		buttonDisplay: function(arr){
 			// empty current buttonset
-			$('#buttons').empty();
+			$('#js-buttons').empty();
 
 			// loop thru array, append new button with array string
 			$(arr).each(function(){
-				var btns = $('#buttons').append($('<button>').text(this));
+				var btns = $('#js-buttons').append($('<button>').text(this).attr('class','c-btnlist__btn'));
 			});
 		},
 
@@ -52,63 +52,66 @@ $(document).ready(function(){
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10;
-			
-
-				$.ajax({
-					url: queryUrl,
-					method: this.method
-				}).done(function(res){
-			
-					var $res = $(res.data);
-					var $gifdiv = $('#gif-display');
-					
-					$res.each(function(){ // for each returned object in the array
-						if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
-							var $gif = $('<div>').attr({
-								class: 'gif',
-								title: 'Click to Play/Pause'
-							});
-							var st_img = this.images.original_still.url;
-							var an_img = this.images.original.url;
-							$gif.append($('<img>').attr({
-								src: st_img,
-								'data-still': st_img,
-								'data-animated': an_img,
-								'data-playing': 'paused'
-							}));
-							$gif.append($('<span>').attr('class','gif-rating').text('Rating: '+this.rating));	
-							$gifdiv.append($gif);
-
-						}
-						giftastic.requested = false;
-					});
-					
-					// make sure initial load has enough gifs to fill screen
-					// error handle when results returns 9 or less gifs
-					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+				this.loadPanel('show');
+				setTimeout(function(){
+					$.ajax({
+						url: queryUrl,
+						method: this.method
+					}).done(function(res){
+				
+						var $res = $(res.data);
+						var $gifdiv = $('#js-gif-display');
+									
+						$res.each(function(){ // for each returned object in the array
+							if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
+								var $gif = $('<div>').attr({
+									class: 'l-grid__item',
+									title: 'Click to Play/Pause'
+								});
+								var st_img = this.images.original_still.url;
+								var an_img = this.images.original.url;
+								$gif.append($('<img>').attr({
+									class: 'l-grid__thumbnail u-imgwidth',
+									src: st_img,
+									'data-still': st_img,
+									'data-animated': an_img,
+									'data-playing': 'paused'
+								}));
+								$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
+								$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
+								$gifdiv.append($gif);
+							}
+							giftastic.requested = false;
+							giftastic.loadPanel('hide');
+						}); // end done function
 						
-						giftastic.getGifs(val);
+						// make sure initial load has enough gifs to fill screen
+						// error handle when results returns 9 or less gifs
+						if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+							
+							giftastic.getGifs(val);
 
-					} else if ( ($res.length < 9) && ($res.length > 0)) {
-						$('#error').text('No more gifs found!');
-						$('#error').fadeIn();
-						giftastic.loadstatus = 'none';
+						} else if ( ($res.length < 9) && ($res.length > 0)) {
+							$('#js-error').text('No more gifs found!');
+							$('#js-error').fadeIn();
+							giftastic.loadstatus = 'none';
 
-					} else if ($res.length == 0) {
-						
-						if (giftastic.loadstatus === 'first') {
-							$('#error').text('No gifs found for ' + giftastic.currentcat + '!');
-							$('#error').fadeIn();
+						} else if ($res.length == 0) {
+							
+							if (giftastic.loadstatus === 'first') {
+								$('#js-error').text('No gifs found for ' + giftastic.currentcat + '!');
+								$('#js-error').fadeIn();
+							} else {
+								$('#js-error').text('No more gifs found');
+								$('#js-error').fadeIn();
+							}
+							giftastic.loadstatus = 'none';
+
 						} else {
-							$('#error').text('No more gifs found');
-							$('#error').fadeIn();
-						}
-						giftastic.loadstatus = 'none';
-
-					} else {
-						giftastic.loadstatus = 'done';
-					}
-				});
+							giftastic.loadstatus = 'done';
+						} // end scroll checking
+					}); // end .ajax done function
+				},900); // end set timeout function
 			}
 		},
 
@@ -122,7 +125,7 @@ $(document).ready(function(){
 		playPause: function(val){
 			// when user clicks gif, if playing, pause, if paused, play.
 			var $val = $(val);
-			var $bg = $('#gif-display');
+			var $bg = $('#js-gif-display');
 			if ($val.attr('data-playing') == 'playing') {
 				this.swapSrcs($val,$val.attr('data-still'),'paused');
 			} else {
@@ -131,12 +134,20 @@ $(document).ready(function(){
 		},
 
 		initLoad: function($text){
-			var $gifdiv = $('#gif-display');
+			var $gifdiv = $('#js-gif-display');
 			$gifdiv.empty().append($('<p>').text('Here are some ' + $text +' gifs. Click to animate!'));
 			obj.loadstatus = 'first';
 			obj.currentcat = $text;
 			obj.params.offset = 0;
 			obj.getGifs($text);
+		},
+
+		loadPanel: function(type){
+			if (type === 'show') {
+				$('#js-loadpanel').show();
+			} else if (type === 'hide') {
+				$('#js-loadpanel').hide();
+			}
 		}
 
 	};
@@ -146,17 +157,19 @@ $(document).ready(function(){
 	// gif category button
 	$(document).on('click', 'button', function(){
 		$btntext = $(this).text().replace(/[^a-z0-9\s]/gi, '');
-		$('#error').fadeOut();
+		$('#js-error').fadeOut();
 		obj.initLoad($btntext);
 	});
 
 	// input button - call newButton
-	$('#input').on('submit', function(e){
+	$('#js-add-button').on('submit', function(e){
+		console.log('user input detected',$('#js-user-input').val().replace(/[^a-z0-9\s]/gi, ''));
 		e.preventDefault();
-		var $btntext = $('#user-input').val().replace(/[^a-z0-9\s]/gi, '');
-		$('#error').fadeOut();
+		var $btntext = $('#js-user-input').val().replace(/[^a-z0-9\s]/gi, '');
+		$('#js-error').fadeOut();
 		obj.newButton($btntext);
 		obj.initLoad($btntext);
+		$('#js-user-input').val('');
 	});
 
 	// gif image
