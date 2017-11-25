@@ -43,6 +43,12 @@
 	.t-giftastic .c-btnlist__header {
 		color: #0e0e0e;
 	}
+	input:checked + .c-btn__switchslider {
+		background: #024959;
+	}
+	input:focus + .c-btn__switchslider {
+		box-shadow: 0 0 1px #024959;
+	}
 
 	.t-giftastic .c-panel {
 		background: #a3b8d4;
