@@ -44,15 +44,6 @@
 		margin-top: -0.66667rem; 
 	}
 
-	p:last-of-type:after {
-		content: " \26CA";
-		/*display: block;
-		margin: 0.66667rem auto 0;
-		text-align: center;
-		width: auto;*/
-		
-	}
-
 	code,
 	pre {
 		font-family: 'Lucida Console', Monaco, monospace, serif;

@@ -363,7 +363,7 @@
 	}
 
 	.u-error {
-		background-color: #ffbaba;
+		background: #ffbaba;
 		color: #d8000c;
 		padding: 1.125rem;
 	}

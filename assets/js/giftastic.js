@@ -58,7 +58,7 @@ $(document).ready(function(){
 						url: queryUrl,
 						method: this.method
 					}).done(function(res){
-				
+						console.log($(res.data));
 						var $res = $(res.data);
 						var $gifdiv = $('#js-gif-display');
 						
@@ -68,10 +68,12 @@ $(document).ready(function(){
 									class: 'l-grid__item',
 									title: 'Click to Play/Pause'
 								});
-								var st_img = this.images.original_still.url;
-								var an_img = this.images.original.url;
+								// var st_img = this.images.original_still.url;
+								// var an_img = this.images.original.url;
+								var st_img = this.images.fixed_height_still.url;
+								var an_img = this.images.fixed_height.url;
 								$gif.append($('<img>').attr({
-									class: 'l-grid__thumbnail u-imgwidth',
+									class: 'l-grid__thumbnail',
 									src: st_img,
 									'data-still': st_img,
 									'data-animated': an_img,
@@ -95,6 +97,7 @@ $(document).ready(function(){
 							$('#js-error').text('No more gifs found!');
 							$('#js-error').fadeIn();
 							giftastic.loadstatus = 'none';
+							giftastic.loadPanel('hide');
 
 						} else if ($res.length == 0) {
 							
@@ -106,6 +109,7 @@ $(document).ready(function(){
 								$('#js-error').fadeIn();
 							}
 							giftastic.loadstatus = 'none';
+							giftastic.loadPanel('hide');
 
 						} else {
 							giftastic.loadstatus = 'done';
