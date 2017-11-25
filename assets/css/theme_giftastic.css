@@ -1,0 +1,61 @@
+@media screen { /* Mobile first */
+
+	.t-giftastic {
+		background: #092140;
+		color: #092140;
+	}
+
+	.t-giftastic .c-btnlist {
+		background: #efefef;
+		border-color: #ffeee7;
+		border-radius: 5px;
+	}
+
+	.t-giftastic .c-btnlist__btn {
+		background: #024959;
+		border-radius: 5px;
+		color: #ffeee7;
+	}
+
+	.t-giftastic .c-btnlist__header {
+		color: #0e0e0e;
+	}
+
+	.t-giftastic .c-search__input {
+		color: #092140;
+	}
+		.t-giftastic .c-search__btn-submit {
+			background: #024959;
+			color: #ffeee7;
+		}
+
+
+}
+
+@media only screen and (min-width: 480px) {
+
+}
+
+@media only screen and (min-width: 640px) {
+
+}
+
+@media only screen and (min-width: 768px) {
+	
+}
+
+@media only screen and (min-width: 980px) {
+	
+}
+
+@media only screen and (min-width: 1280px) {
+
+}
+
+@media only screen and (min-width: 1600px) {
+
+}
+
+@media only screen and (min-width: 1980px) {
+    
+}

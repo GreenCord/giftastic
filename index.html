@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-	<title>Giftastic Gif Categories</title>
+	<title>Giftastic – Gif Categories</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://use.fontawesome.com/f12d97369d.js"></script> <!--FontAwesome Icons-->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Dosis:400,800" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Lora:700" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/typography.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/theme_giftastic.css" />
 </head>
-<body>
-	<div class="main-wrapper">
-	<a class="skip-to-content" href="#skipnav" title="Skip Navigation">Skip to main content</a>
-		<div class="header-wrapper">
-			<header>
-				<div class="logo-wrapper">
-					<h1>Giftastic Gif Categories</h1>
-				</div>
+<body class="t-giftastic">
+	<div class="l-wrapper l-wrapper--flex">
+		<div class="l-wrapper c-sec c-sec--dark">
+			<a class="u-sronly u-sronly--tabshow" href="#skipnav" title="Skip Navigation">Skip to main content</a>
+			<header class="l-container l-container--nav">
+				<h1 class="c-header__brandtext">
+					<a href="index.html" class="u-nolinkstyle">
+						<img class="c-header__brandimg" src="assets/img/giftastic.png" alt="Giftastic Logo" />
+					</a>
+					<a href="https://giphy.com" title="GIPHY" target="_blank"><img class="c-header__brandimg--right" src="assets/img/Poweredby_100px-Black_VertLogo.png" alt="Powered by Giphy" /></a>
+				</h1>
 			</header>
-		</div>
-		<div class="content-wrapper" id="skipnav">
-			<div id="input" class="button-wrapper">
-				<form id="add-button" class="user-input">
-					<input id="user-input" type="text" placeholder="Add a category..." /><input type="submit" value="Add" />
+			<div class="l-container l-container--nav c-search">
+				<form id="js-add-button" class="c-search__form">
+					<input id="js-user-input" type="text" class="c-search__input" placeholder="Search for gifs..." /><input class="c-search__btn-submit" type="submit" value="Search" />
 				</form>
-				<div id="buttons"></div>
 			</div>
-			<div id="gif-display" class="gifs-wrapper">
-			</div>
-			<div id="error" class="msg-error" style="display: none;"></div>
-
 		</div>
+
+		<div class="l-wrapper">
+			<div class="l-container c-col-full" id="skipnav">
+			
+				<div id="js-input" class="c-btnlist">
+					<div class="c-btnlist__header u-f-serif">Recent searches...</div>
+					<div id="js-buttons"></div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<div class="l-wrapper">
+			<div class="l-container">
+
+				<div id="js-gif-display" class="l-grid c-panel">
+				</div>
+
+				<div id="js-error" class="c-panel u-error" style="display: none;"></div>
+
+			</div>
+		</div>
+
 	</div>
 	<div class="footer-wrapper">
 		<footer>
