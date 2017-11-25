@@ -26,6 +26,7 @@ $(document).ready(function(){
 		playing: false,
 		currentcat: '',
 		loadstatus: '',
+		requested: false,
 
 		buttonDisplay: function(arr){
 			// empty current buttonset
@@ -46,68 +47,71 @@ $(document).ready(function(){
 
 		getGifs: function(val){
 			// parameterize based on q = val, ajax the api, display still images in #gif-display
-			
+			this.requested = true;
 			if (this.loadstatus != 'none') {
 				this.params.q = val;
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10;
-			
+				this.loadPanel('show');
+				setTimeout(function(){
+					$.ajax({
+						url: queryUrl,
+						method: this.method
+					}).done(function(res){
+				
+						var $res = $(res.data);
+						var $gifdiv = $('#js-gif-display');
+						
+						$res.each(function(){ // for each returned object in the array
+							if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
+								var $gif = $('<div>').attr({
+									class: 'l-grid__item',
+									title: 'Click to Play/Pause'
+								});
+								var st_img = this.images.original_still.url;
+								var an_img = this.images.original.url;
+								$gif.append($('<img>').attr({
+									class: 'l-grid__thumbnail u-imgwidth',
+									src: st_img,
+									'data-still': st_img,
+									'data-animated': an_img,
+									'data-playing': 'paused'
+								}));
+								$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
+								$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
+								$gifdiv.append($gif);
+							}
+							giftastic.requested = false;
+							giftastic.loadPanel('hide');
+						});
+						
+						// make sure initial load has enough gifs to fill screen
+						// error handle when results returns 9 or less gifs
+						if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+							
+							giftastic.getGifs(val);
 
-				$.ajax({
-					url: queryUrl,
-					method: this.method
-				}).done(function(res){
-			
-					var $res = $(res.data);
-					var $gifdiv = $('#js-gif-display');
-					
-					$res.each(function(){ // for each returned object in the array
-						if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
-							var $gif = $('<div>').attr({
-								class: 'l-grid__item',
-								title: 'Click to Play/Pause'
-							});
-							var st_img = this.images.original_still.url;
-							var an_img = this.images.original.url;
-							$gif.append($('<img>').attr({
-								class: 'l-grid__thumbnail u-imgwidth',
-								src: st_img,
-								'data-still': st_img,
-								'data-animated': an_img,
-								'data-playing': 'paused'
-							}));
-							$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
-							$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
-							$gifdiv.append($gif);
+						} else if ( ($res.length < 9) && ($res.length > 0)) {
+							$('#js-error').text('No more gifs found!');
+							$('#js-error').fadeIn();
+							giftastic.loadstatus = 'none';
+
+						} else if ($res.length == 0) {
+							
+							if (giftastic.loadstatus === 'first') {
+								$('#js-error').text('No gifs found for ' + giftastic.currentcat + '!');
+								$('#js-error').fadeIn();
+							} else {
+								$('#js-error').text('No more gifs found');
+								$('#js-error').fadeIn();
+							}
+							giftastic.loadstatus = 'none';
+
+						} else {
+							giftastic.loadstatus = 'done';
 						}
 					});
-					
-					// make sure initial load has enough gifs to fill screen
-					// error handle when results returns 9 or less gifs
-					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
-						
-						giftastic.getGifs(val);
-
-					} else if ( ($res.length < 9) && ($res.length > 0)) {
-						$('#js-error').text('No more gifs found!');
-						$('#js-error').fadeIn();
-						giftastic.loadstatus = 'none';
-
-					} else if ($res.length == 0) {
-						
-						if (giftastic.loadstatus === 'first') {
-							$('#js-error').text('No gifs found for ' + giftastic.currentcat + '!');
-							$('#js-error').fadeIn();
-						} else {
-							$('#js-error').text('No more gifs found');
-							$('#js-error').fadeIn();
-						}
-						giftastic.loadstatus = 'none';
-
-					} else {
-						giftastic.loadstatus = 'done';
-					}
-				});
+				},900);
 			}
 		},
 
@@ -136,6 +140,14 @@ $(document).ready(function(){
 			obj.currentcat = $text;
 			obj.params.offset = 0;
 			obj.getGifs($text);
+		},
+
+		loadPanel: function(type){
+			if (type === 'show') {
+				$('#js-loadpanel').show();
+			} else if (type === 'hide') {
+				$('#js-loadpanel').hide();
+			}
 		}
 
 	};
@@ -170,7 +182,9 @@ $(document).ready(function(){
 	$(window).scroll(function(){
 		// user scrolls to last 2% of height
 		if($(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() )){
-			obj.getGifs(obj.currentcat);
+			if (!giftastic.requested) {
+				obj.getGifs(obj.currentcat);
+			}
 		}
 	});
 

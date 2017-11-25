@@ -241,6 +241,7 @@
 		padding: 1.125rem 1.625rem 1.625rem;
 	}
 		.c-search__form {
+			color: #0e0e0e;
 			font-size: 0;
 		}
 
@@ -252,10 +253,10 @@
 			width: 90%;
 		}
 		.c-search__btn-submit {
-			background: #8cbeb2;
+			background: #afafaf;
 			border: 0;
 			border-radius: 0 15px 15px 0;
-			color: #5c4b51;
+			color: #0e0e0e;
 			display: inline-block;
 			padding: 0.5rem;
 			width: 10%;
@@ -322,7 +323,15 @@
 			.c-panel--transparent {
 				background: transparent;
 			}
-
+		.c-panel__loader {
+			border: 1px solid #efefef;
+			border-radius: 15px;
+			padding: 3rem;
+		}
+		.c-panel__loaderanim {
+			display: block;
+			margin: 0 auto;
+		}
 
 
 
