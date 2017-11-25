@@ -105,35 +105,36 @@ $(document).ready(function(){
 							giftastic.requested = false;
 							giftastic.loadPanel('hide');
 						});
-					}); // end done function
+					
 				
-					// make sure initial load has enough gifs to fill screen
-					// error handle when results returns 9 or less gifs
-					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
-						
-						giftastic.getGifs(val);
+						// make sure initial load has enough gifs to fill screen
+						// error handle when results returns 9 or less gifs
+						if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+							
+							giftastic.getGifs(val);
 
-					} else if ( ($res.length < 9) && ($res.length > 0)) {
-						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
-						$('#js-error').fadeIn();
-						giftastic.loadstatus = 'none';
-						giftastic.loadPanel('hide');
-
-					} else if ($res.length == 0) {
-						
-						if (giftastic.loadstatus === 'first') {
-							$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
-							$('#js-error').fadeIn();
-						} else {
+						} else if ( ($res.length < 9) && ($res.length > 0)) {
 							$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
 							$('#js-error').fadeIn();
-						}
-						giftastic.loadstatus = 'none';
-						giftastic.loadPanel('hide');
+							giftastic.loadstatus = 'none';
+							giftastic.loadPanel('hide');
 
-					} else {
-						giftastic.loadstatus = 'done';
-					} // end scroll checking
+						} else if ($res.length == 0) {
+							
+							if (giftastic.loadstatus === 'first') {
+								$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
+								$('#js-error').fadeIn();
+							} else {
+								$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
+								$('#js-error').fadeIn();
+							}
+							giftastic.loadstatus = 'none';
+							giftastic.loadPanel('hide');
+
+						} else {
+							giftastic.loadstatus = 'done';
+						} // end scroll checking
+					}); // end done function
 				},900);
 			}
 		},
