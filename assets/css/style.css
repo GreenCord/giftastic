@@ -94,6 +94,22 @@
 	/* End Layout Elements */
 
 	/* Component Elements */
+	.c-btn {
+		background: #afafaf;
+		border: 0;
+		color: #0e0e0e;
+		cursor: pointer;
+		display: inline-block;
+		margin: 0 0.5rem 0.5rem 0;
+		padding: 0.5rem;
+		vertical-align: middle;
+	}
+
+	.c-btn--action {
+		background: #0e0e0e;
+		color: #fefefe;
+	}
+
 	.c-btnlist {
 		border: 1px solid;
 		padding: 0.5rem;
@@ -104,16 +120,6 @@
 			margin: 0;
 		}
 
-		.c-btnlist__btn {
-			background: #afafaf;
-			border: 0;
-			color: #0e0e0e;
-			cursor: pointer;
-			display: inline-block;
-			margin: 0 0.5rem 0.5rem 0;
-			padding: 0.5rem;
-			vertical-align: middle;
-		}
 	.c-col-full {
 		display: block;
 		margin: 0 auto;
