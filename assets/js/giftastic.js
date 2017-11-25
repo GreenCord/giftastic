@@ -61,7 +61,7 @@ $(document).ready(function(){
 				
 						var $res = $(res.data);
 						var $gifdiv = $('#js-gif-display');
-						
+									
 						$res.each(function(){ // for each returned object in the array
 							if (this.rating != 'r') { // filter out gifs rated 'r' and build gif tile to append
 								var $gif = $('<div>').attr({
@@ -83,7 +83,7 @@ $(document).ready(function(){
 							}
 							giftastic.requested = false;
 							giftastic.loadPanel('hide');
-						});
+						}); // end done function
 						
 						// make sure initial load has enough gifs to fill screen
 						// error handle when results returns 9 or less gifs
@@ -109,9 +109,9 @@ $(document).ready(function(){
 
 						} else {
 							giftastic.loadstatus = 'done';
-						}
-					});
-				},900);
+						} // end scroll checking
+					}); // end .ajax done function
+				},900); // end set timeout function
 			}
 		},
 
