@@ -49,75 +49,12 @@ $(document).ready(function(){
 				cats.splice(0,1);
 			}
 			this.buttonDisplay(cats);
-			localStorage.clear();
+			localStorage.removeItem('cats');
 			localStorage.setItem('cats',JSON.stringify(cats));
 		},
 
 		ajaxCall: function(url, val){
-			$.ajax({
-				url: url,
-				method: this.method
-			}).done(function(res){
-				var $res = $(res.data);
-				var $gifdiv = $('#js-gif-display');
-
-				if($res.length == 0) {
-					$gifdiv.hide();
-				} else {
-					$gifdiv.show();
-				}
-							
-				$res.each(function(){ // for each returned object in the array
-					if ((this.rating != 'r') || ($('#js-switch-click').attr('data-filter') == 'false')) { // filter out gifs rated 'r' and build gif tile to append
-						var $gif = $('<div>').attr({
-							class: 'l-grid__item',
-							title: 'Click to Play/Pause'
-						});
-						var st_img = this.images.fixed_height_still.url;
-						var an_img = this.images.fixed_height.url;
-						$gif.append($('<img>').attr({
-							class: 'l-grid__thumbnail',
-							src: st_img,
-							'data-still': st_img,
-							'data-animated': an_img,
-							'data-playing': 'paused'
-						}));
-						$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
-						$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
-						$gifdiv.append($gif);
-					}
-					giftastic.requested = false;
-					giftastic.loadPanel('hide');
-				}); // end done function
-				
-				// make sure initial load has enough gifs to fill screen
-				// error handle when results returns 9 or less gifs
-				if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
-					
-					giftastic.getGifs(val);
-
-				} else if ( ($res.length < 9) && ($res.length > 0)) {
-					$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
-					$('#js-error').fadeIn();
-					giftastic.loadstatus = 'none';
-					giftastic.loadPanel('hide');
-
-				} else if ($res.length == 0) {
-					
-					if (giftastic.loadstatus === 'first') {
-						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
-						$('#js-error').fadeIn();
-					} else {
-						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
-						$('#js-error').fadeIn();
-					}
-					giftastic.loadstatus = 'none';
-					giftastic.loadPanel('hide');
-
-				} else {
-					giftastic.loadstatus = 'done';
-				} // end scroll checking
-			});
+			
 		},
 
 		getGifs: function(val){
@@ -128,7 +65,76 @@ $(document).ready(function(){
 				var queryUrl = this.url + $.param(this.params);
 				giftastic.params.offset += 10; // increment offset for next call
 				this.loadPanel('show');
-				setTimeout(this.ajaxCall(queryUrl,val),900);
+				
+				setTimeout(function(){
+					$.ajax({
+						url: queryUrl,
+						method: this.method
+					}).done(function(res){
+					
+						var $res = $(res.data);
+						var $gifdiv = $('#js-gif-display');
+
+						if($res.length == 0) {
+							$gifdiv.hide();
+						} else {
+							$gifdiv.show();
+						}
+							
+						$res.each(function(){ // for each returned object in the array
+							
+							if (((this.rating == 'g') || this.rating == 'y') || ($('#js-switch-click').attr('data-filter') == 'false')) { // filter out gifs rated 'r' and build gif tile to append
+								var $gif = $('<div>').attr({
+									class: 'l-grid__item',
+									title: 'Click to Play/Pause'
+								});
+								var st_img = this.images.fixed_height_still.url;
+								var an_img = this.images.fixed_height.url;
+								$gif.append($('<img>').attr({
+									class: 'l-grid__thumbnail',
+									src: st_img,
+									'data-still': st_img,
+									'data-animated': an_img,
+									'data-playing': 'paused'
+								}));
+								$gif.append($('<h5>').attr('class','l-grid__headline').text(this.title));
+								$gif.append($('<p>').attr('class','l-grid__text').text('Rating: '+this.rating));	
+								$gifdiv.append($gif);
+							} // end if - filter checking
+
+							giftastic.requested = false;
+							giftastic.loadPanel('hide');
+						});
+					}); // end done function
+				
+					// make sure initial load has enough gifs to fill screen
+					// error handle when results returns 9 or less gifs
+					if ( $(window).scrollTop() + $(window).height() >= ( 0.98 * $(document).height() ) && ($res.length >= 9)){
+						
+						giftastic.getGifs(val);
+
+					} else if ( ($res.length < 9) && ($res.length > 0)) {
+						$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
+						$('#js-error').fadeIn();
+						giftastic.loadstatus = 'none';
+						giftastic.loadPanel('hide');
+
+					} else if ($res.length == 0) {
+						
+						if (giftastic.loadstatus === 'first') {
+							$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
+							$('#js-error').fadeIn();
+						} else {
+							$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No more gifs found for ' + giftastic.currentcat + '!');
+							$('#js-error').fadeIn();
+						}
+						giftastic.loadstatus = 'none';
+						giftastic.loadPanel('hide');
+
+					} else {
+						giftastic.loadstatus = 'done';
+					} // end scroll checking
+				},900);
 			}
 		},
 
@@ -232,8 +238,10 @@ $(document).ready(function(){
 		console.log('Safe Search Clicked');
 		if ($('#js-switch-click').attr('data-filter') == 'true') {
 			$('#js-switch-click').attr('data-filter','false');
+			$('#js-switch__text').text('OFF');
 		} else {
 			$('#js-switch-click').attr('data-filter','true');
+			$('#js-switch__text').text('ON');
 		}
 		console.log('New toggle state of span: ', $('#js-switch-click').attr('data-filter'));
 	});
