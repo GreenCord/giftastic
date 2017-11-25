@@ -6,7 +6,7 @@
 	}
 
 	.t-giftastic .l-grid__item {
-		background: #a3b8d4;
+		background: #e6edf7;
     border: 1px solid rgba(2, 73, 89, 0.2);
     border-radius: 15px;
     box-shadow: 0 5px 10px rgba(0,0,24,0.2);
@@ -45,7 +45,7 @@
 	}
 
 	.t-giftastic .c-panel {
-		background: #e6edf7;
+		background: #a3b8d4;
 	}
 
 	.t-giftastic .c-panel__loader {
