@@ -78,10 +78,10 @@ $(document).ready(function(){
 						var $res = $(res.data);
 						var $gifdiv = $('#js-gif-display');
 
-						if($res.length == 0) {
-							$gifdiv.hide();
-						} else {
+						if($res.length != 0) {
 							$gifdiv.show();
+						// } else {
+						// 	$gifdiv.show();
 						}
 							
 						$res.each(function(){ // for each returned object in the array
@@ -124,7 +124,7 @@ $(document).ready(function(){
 
 						} else if ($res.length == 0) {
 							
-							if (giftastic.loadstatus === 'first') {
+							if ((giftastic.loadstatus === 'first') && (giftastic.offset >= 0)) {
 								$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;No gifs found for ' + giftastic.currentcat + '!');
 								$('#js-error').fadeIn();
 							} else {
@@ -207,7 +207,6 @@ $(document).ready(function(){
 		}
 		e.preventDefault();
 		var $btntext = $('#js-user-input').val().replace(/[^a-z0-9\s]/gi, '');
-		console.log($btntext);
 		if (($btntext == null) || ($btntext == '')) {
 			$('#js-error').html('<span class="fa-stack"><i class="fa fa-times-circle fa-stack-2x" aria-hidden="true"></i></span>&nbsp;Please enter a search term in order to search for gifs.').fadeIn();
 			return false;
@@ -245,7 +244,7 @@ $(document).ready(function(){
 	});
 
 	$('#js-switch-click').click(function(){
-		console.log('Safe Search Clicked');
+	
 		if ($('#js-switch-click').attr('data-filter') == 'true') {
 			$('#js-switch-click').attr('data-filter','false');
 			$('#js-switch__text').text('OFF');
@@ -253,11 +252,10 @@ $(document).ready(function(){
 			$('#js-switch-click').attr('data-filter','true');
 			$('#js-switch__text').text('ON');
 		}
-		console.log('New toggle state of span: ', $('#js-switch-click').attr('data-filter'));
 	});
 
 
 	// load initial buttons
 	obj.buttonDisplay(obj.categories);
-console.log('Current toggle state of span: ',  $('#js-switch-click').attr('data-filter'));
+
 });

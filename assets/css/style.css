@@ -319,6 +319,8 @@
 			width: 70%;
 		}
 		.c-search__btn-submit {
+			-moz-appearance: none;
+			-webkit-appearance: none;
 			background: #afafaf;
 			border: 0;
 			border-radius: 0 15px 15px 0;
